@@ -4,8 +4,8 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 ### 1. Insert Sort ###
 	void insert_sort(int *arr, int len)
 	{
-		int key,int j;
-		for(int i = 1; i < len; i++){
+		int key, i, j;
+		for(i = 1; i < len; i++){
 			key = arr[i];
 			j = i;
 			while(--j>-1){
