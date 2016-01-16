@@ -23,5 +23,32 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 ### 2. Quick Sort ###
 	void quick_sort(int *arr, int start, int end)
 	{
+		if(start == end){
+			return;
+		}
 		
+		int key = arr[start];
+		int i = start, j = end, mid;
+		while(i != j){
+			if(arr[i] <= key){
+				i += 1;
+				if(arr[j] > key){
+					j -= 1;
+				}
+			}else{
+				if(arr[j] <= key){
+					swap(arr[i],arr[j]);
+					i += 1;
+					j -= 1;
+				}else{
+					j -= 1;
+				}
+			}
+			if(i == j){
+				
+			}
+		}
+		
+		quick_sort(arr, start, mid-1);
+		quick_sort(arr, mid, end);
 	}
