@@ -10,7 +10,8 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 			j = i;
 			while(--j>-1){
 				if(key < arr[j]){
-					arr[j+1] = arr[j];			
+					arr[j+1] = arr[j];
+					arr[j] = key;
 				}else{
 					arr[j+1] = key;
 					break;
