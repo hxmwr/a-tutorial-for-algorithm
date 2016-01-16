@@ -29,16 +29,16 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 		}
 		
 		int key = arr[start];
-		int i = start, j = end, mid;
-		while(i != j){
-			if(arr[i] <= key){
+		int i = start-1, j = end+1, mid;
+		while(j > i){
+			if(arr[i+1] <= key){
 				i += 1;
-				if(arr[j] > key){
+				if(arr[j-1] >= key){
 					j -= 1;
 				}
-			}else{
-				if(arr[j] <= key){
-					swap(arr[i],arr[j]);
+			}else{//arr[i+1] > key
+				if(arr[j+1] <= key){
+					swap(arr[i+1],arr[j+1]);
 					i += 1;
 					j -= 1;
 				}else{
@@ -47,6 +47,7 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 			}
 		}
 		
+		mid = i;
 		quick_sort(arr, start, mid-1);
 		quick_sort(arr, mid, end);
 	}
