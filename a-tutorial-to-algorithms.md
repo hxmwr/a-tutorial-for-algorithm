@@ -20,7 +20,7 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 		}
 	}
 
-### 2. Quick Sort ###
+### 2. Quick Sort-single loop ###
 	void quick_sort(int *arr, int start, int end)
 	{
 		if(start == end){
@@ -43,9 +43,6 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 				}else{
 					j -= 1;
 				}
-			}
-			if(i == j){
-				
 			}
 		}
 		
