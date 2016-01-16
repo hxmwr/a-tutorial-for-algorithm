@@ -48,7 +48,7 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 		}
 		
 		mid = i;
-		quick_sort(arr, start, mid-1);
+		quick_sort(arr, start, mid);
 		quick_sort(arr, mid, end);
 	}
 ######
