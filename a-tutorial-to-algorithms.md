@@ -100,6 +100,6 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 	        if(u==v)break;
 	        u++;
 	    }
-	    myqsort(x,u-1);
-	    myqsort(u,y);
+	    quick_sort(x,u-1);
+	    quick_sort(u,y);
 	}
