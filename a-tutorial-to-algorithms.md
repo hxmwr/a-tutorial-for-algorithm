@@ -27,33 +27,79 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 		if(start == end){
 			return;
 		}
-		
-		int key = arr[start];
-		int i = start-1, j = end+1, mid;
-		while(j > i){
-			if(arr[i+1] <= key){
-				i += 1;
-				if(arr[j-1] >= key){
-					j -= 1;
-				}
-			}else{//arr[i+1] > key
-				if(arr[j+1] <= key){
-					swap(arr[i+1],arr[j+1]);
-					i += 1;
-					j -= 1;
+	
+		int i = start, j = end, key = arr[start], mid;
+	
+		while(i!=j){
+			if(arr[i] >= key){
+				if(arr[j] < key){
+					swap(arr[j], arr[i]);
+					if(( j-i) > 2){
+						if(arr[i+1] < key){
+							i++;
+						}
+						j--;
+					}else if((j-i) == 1){
+						j--;
+					}else{
+						if(arr[i+1] < key){
+							i++;
+							j--;
+						}else{
+							j -= 2;
+						}
+					}
 				}else{
-					j -= 1;
+					j--;
+				}				
+			}else{
+				if(arr[j] < key){
+					i++;
+				}else{
+					if((j - i) > 2){
+						if(arr[i+1] < key){
+							i++;
+						}
+						j--;
+					}else if((j-i) == 2){
+						if(arr[i+1] < key){
+							i++;
+							j--;
+						}else{
+							j -= 2;
+						}
+					}else{
+						j--;
+					}
 				}
 			}
 		}
-		
+	
 		mid = i;
 		quick_sort(arr, start, mid);
-		quick_sort(arr, mid, end);
+		quick_sort(arr, mid + 1, end);
 	}
 ######
 	//double loop
-	void quick_sort()
+	void quick_sort(int* x,int* y)
 	{
-	
+	    int temp,w,* u,*v;
+	    u=x;v=y;w=*y;
+	    if(x==y)return;
+	    while(u!=v)//开始调换元素位置，大于等于w的放在右边，其余放在左边
+	    {
+	        if(*u>w)//检查当前u所指向的元素是否大于末尾元素的值，是则执行下面语句块
+	        {
+	            //向左查找可以交换的元素
+	            while(u!=v)
+	            {
+	                if(*v<=w){temp=*u;*u=*v;*v=temp;break;}//找到这样一个元素，则立即进行交换
+	                v--;
+	            }
+	        }
+	        if(u==v)break;
+	        u++;
+	    }
+	    myqsort(x,u-1);
+	    myqsort(u,y);
 	}
