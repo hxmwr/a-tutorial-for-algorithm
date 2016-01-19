@@ -159,6 +159,7 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 ```
 >NOTE<br>
 The idea behind this algorithm is clear which is seperating the original array into two parts and sort them seperately by ***merge sort*** itself also known as recursive invoke, then merge them in another block of empty memory space which is the same size with the original array. The key point for this is ***merge***, in each loop you sequencely pick a smaller element out from these two seperated arraies and put it into the newly applied memory one by one until there is no elements left in these two arraies. The below gives another ***merge*** method which is slightly different from the above one.
+
 ``` c
 	void Merge(int sourceArr[],int tempArr[], int startIndex, int midIndex, int endIndex)
 	{
