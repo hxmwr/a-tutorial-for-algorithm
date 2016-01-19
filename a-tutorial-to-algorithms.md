@@ -108,7 +108,7 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 	    quick_sort(u,y);
 	}
 ```
->**NOTE**<br>
+>`NOTE`<br>
 >This qsort algorithm's core idea is quite simple, before you rearrange the array, you take one element of it as standard value, then you just seperate the input array into two parts, one of which is less or equal than the standard value, while another part is greater than the standard value, you process these seperated parts with the same manner aforementioned recursively until there are no seperated part consist of more than one element and you'll get a sorted array. But the actual codes of this algorithm are something confusing, you have to keep two pointers, one of which moves from the most left to right, another moves from the most right to left, in every loop you dereference these two pointers and base on these two values you decide whether or not swap the target elements and  move these pointers. At the same time you should deal with some side effects carefully which are not so straightforward.
 
 ### 3.Merge Sort ###
