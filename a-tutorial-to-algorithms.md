@@ -183,3 +183,5 @@ The idea behind this algorithm is clear which is seperating the original array i
 	        Merge(sourceArr, tempArr, startIndex, midIndex, endIndex);
 	    }
 	}
+
+### 4.Heap Sort
