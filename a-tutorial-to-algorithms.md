@@ -105,3 +105,47 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 	}
 >NOTE<br>
 >This qsort algorithm's core idea is quite simple, before you rearrange the array, you take one element of it, then you just seperate the input array into two parts, one of which is less or equal than the standard value, while another part is greater than the standard value, you process these seperated parts with the same manner aforementioned recursively until there are no seperated part consist of more than one element and you'll get a sorted array. But the actual codes of this algorithm are something confusing, you have to keep two pointers, one of which moves from the most left to right, another moves from the most right to left, in every loop you dereference these two pointers and base on these two values you decide whether or not swap the target elements and  move these pointers. At the same time you should deal with some side effects carefully which are not so straightforward.
+### 3.Merge Sort ###
+	void merge(int *s1, int *e1, int *s2, int *e2, int *temp)
+	{
+		int len = (e1 - s1) + (e2 - s2) + 2;
+		int idx;
+		for(int i=0,k=0,idx=0;idx<len;idx++){
+			if((s1 + i) > e1){
+				temp[idx] = *(s2 + k);
+				k++;
+				continue;
+			}
+	
+			if((s2 + k) > e2){
+				temp[idx] = *(s1 + i);
+				i++;
+				continue;
+			}
+	
+			if(*(s1 + i) <= *(s2 + k)){
+				temp[idx] = *(s1 + i);
+				i++;
+			}else{
+				temp[idx] = *(s2 + k);
+				k++;
+			}
+		}
+	
+		for(int j=0;j<len;j++){
+			s1[j] = temp[j];
+		}
+	}
+	void merge_sort(int *start, int *end, int *temp)
+	{
+		if(start == end)return;
+		int *arr1_start = start, *arr1_end, *arr2_start, *arr2_end = end;
+		int distance = end - start;
+		int mid = distance/2;
+		arr1_end = arr1_start + mid;
+		arr2_start = arr1_end +1;
+	
+		merge_sort(arr1_start, arr1_end, temp);
+		merge_sort(arr2_start, arr2_end, temp);
+		merge(arr1_start, arr1_end, arr2_start, arr2_end, temp);
+	}
