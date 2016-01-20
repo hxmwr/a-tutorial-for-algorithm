@@ -193,3 +193,35 @@ The idea behind this algorithm is clear which is seperating the original array i
 	}
 ```
 ### 4.Heap Sort
+``` c
+void build_heap(int a[],int len)
+{
+	int i=len;
+	bool f=false;
+	while((i*2)>len)
+	{
+		int j=i;
+		while(j!=1)
+		{
+			int& c=(int&)(max(a[j/2-1],max(a[j-1],j/2?a[j-2]:a[j])));
+			if(c!=(a[j/2-1])){swap(c,a[j/2-1]);f=true;}
+			j/=2;
+		}
+		i-=2;
+	}
+	if(f)build_heap(a,len);
+	else return;
+}
+//取最大值放在数组末尾，其余元素再进行大顶堆创建
+void heap_sort(int a[],int len)
+{
+	build_heap(a,len);
+	while(len>1)
+	{
+		swap(a[0],a[len-1]);
+		swap(a[len-1],a[len]);
+		build_heap(a,len--);
+	}
+	swap(a[0],a[1]);
+}
+```
