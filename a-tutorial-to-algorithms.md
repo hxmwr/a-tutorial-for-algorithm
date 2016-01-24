@@ -225,3 +225,66 @@ void heap_sort(int a[],int len)
 	swap(a[0],a[1]);
 }
 ```
+``` c
+void heap_build(int *arr, int level, int cur_idx, int arr_len)
+{
+	int left_child;
+	int right_child;
+	int exp;
+	int sum;
+	if(level == 0){
+		left_child = 1;
+		right_child = 2;
+	}else{
+		exp = cur_idx + 1 - (pow(2,level)-1);
+		sum = pow(2,level+1)-1;
+		left_child = 2*exp + sum-2;
+		right_child = left_child + 1;
+	}
+
+	if(left_child < arr_len){
+		if(right_child < arr_len){
+			heap_build(arr, level+1, left_child, arr_len);
+			heap_build(arr, level+1, right_child, arr_len);
+
+			if(arr[cur_idx] < arr[left_child]){
+				if(arr[left_child] < arr[right_child]){
+					swap(arr[cur_idx], arr[right_child]);
+					heap_build(arr, level+1, right_child, arr_len);
+					return;
+				}else{
+					swap(arr[cur_idx], arr[left_child]);
+					heap_build(arr, level+1, left_child, arr_len);
+					return;
+				}
+			}else{
+				if(arr[cur_idx] < arr[right_child]){
+					swap(arr[cur_idx], arr[right_child]);
+					heap_build(arr, level+1, right_child, arr_len);
+					return;
+				}else{
+					return;
+				}	
+			}
+		}else{
+			if(arr[cur_idx] < arr[left_child]){
+				swap(arr[cur_idx], arr[left_child]);
+				return;
+			}else{
+				return;			
+			}
+		}
+	}else{
+		return;
+	}
+}
+
+void heap_sort(int *arr, int arr_len)
+{
+	while(arr_len > 1){
+		heap_build(arr, 0, 0, arr_len);
+		swap(arr[0], arr[arr_len-1]);
+		arr_len--;
+	}
+}
+```
