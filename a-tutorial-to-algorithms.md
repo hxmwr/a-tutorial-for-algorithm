@@ -194,6 +194,7 @@ The idea behind this algorithm is clear which is seperating the original array i
 ```
 ### 4.Heap Sort
 ``` c
+//自下而上建堆
 void build_heap(int a[],int len)
 {
 	int i=len;
@@ -226,6 +227,8 @@ void heap_sort(int a[],int len)
 }
 ```
 ``` c
+//自上而下建堆
+//注意左右孩子节点公式 left_child = 2*cur_idx+1, right_child = left_child + 1
 void heap_build(int *arr, int cur_idx, int arr_len)
 {
 	int left_child;
