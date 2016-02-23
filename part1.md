@@ -260,3 +260,17 @@ void heap_sort(int *arr, int arr_len)
 	}
 }
 ```
+### 5.Select Sort
+```C++
+void select_sort(int *arr, int arr_len)
+{
+	for(int i=0;i<arr_len-1;i++){
+		for(int j=i+1;j<arr_len;j++){
+			if(arr[i] >= arr[j]){
+				swap(arr[i], arr[j]);
+			}
+		}
+	}
+}
+
+```
