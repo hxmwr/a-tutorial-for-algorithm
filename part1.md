@@ -305,9 +305,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	int max_len = 0;
 	for(int i=0;i<n;i++){
 		count++;
-		if((i+1)<n && arr[i]<=arr[i+1]){
-			continue;
-		}else{
+		if((i+1)>=n || arr[i]>arr[i+1]){
 			if(count>max_len){
 				max_len = count;
 			}
