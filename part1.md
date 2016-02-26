@@ -295,3 +295,28 @@ int minCoins(int coins[], int m, int V)
 	return res;
 }
 ```
+###7.Longest Increasing Subsequence
+```C++
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int arr[] = {1,5,2,9,3,5,7,9,6,9,9,10,10,8};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	int count = 0;
+	int max_len = 0;
+	for(int i=0;i<n;i++){
+		count++;
+		if((i+1)<n && arr[i]<=arr[i+1]){
+			continue;
+		}else{
+			if(count>max_len){
+				max_len = count;
+			}
+			count = 0;
+		}
+	}
+
+	cout<<max_len<<endl;
+	system("pause");
+	return 0;
+}
+```
