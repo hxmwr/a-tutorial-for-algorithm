@@ -335,3 +335,5 @@ int lis(int A[], int n){
     return len;
 }
 ```
+>***NOTE***<br>
+To solve thie problem you must know what is the `Longest Increasing Subsequence`, The `Subsequence` is a increasing sequence and it may not be a continuous sequence, so there maybe a lot of possible subsequences, which make the problem a little more complexity. 
