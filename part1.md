@@ -297,6 +297,7 @@ int minCoins(int coins[], int m, int V)
 ```
 ###7.Longest Increasing Subsequence
 ```C++
+// O(nlgn)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	int arr[] = {1,5,2,9,3,5,7,9,6,9,9,10,10,8};
@@ -316,5 +317,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	cout<<max_len<<endl;
 	system("pause");
 	return 0;
+}
+```
+```C++
+// O(n^2)
+int lis(int A[], int n){
+    int *d = new int[n];
+    int len = 1;
+    for(int i=0; i<n; ++i){
+        d[i] = 1;
+        for(int j=0; j<i; ++j)
+            if(A[j]<=A[i] && d[j]+1>d[i])
+                d[i] = d[j] + 1;
+        if(d[i]>len) len = d[i];
+    }
+    delete[] d;
+    return len;
 }
 ```
