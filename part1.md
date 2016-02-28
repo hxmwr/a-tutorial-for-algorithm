@@ -500,3 +500,64 @@ int _tmain(int argc, _TCHAR* argv[])
     return 0;
 }
 ```
+###9. Max Value In Bag
+```C++
+#include "stdafx.h"
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void bag01(int things[][3], int n, int M, int idx, int m, int value, int &maxV, int in_bag[], int res[])
+{
+	things[idx][2] = 1;
+	if((things[idx][0] + m) <= M){
+		m += things[idx][0];
+		value += things[idx][1];
+		in_bag[idx] = 1;
+	}
+
+	int i;
+	int flag = 0;
+	for(i=0;i<n;i++){
+		if(things[i][2] == 0){
+			flag = 1;
+			bag01(things, n, M, i, m, value, maxV, in_bag,res);
+		}
+	}
+
+	if(!flag){
+		if(value > maxV){
+			maxV = value;
+			memcpy(res,in_bag,20);
+		}	
+	}
+
+	in_bag[idx] = 0;
+	things[idx][2] = 0;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	
+	int arr[][3] = {
+		{2,6,0},
+		{2,3,0},
+		{6,5,0},
+		{5,4,0},
+		{4,6,0}
+	};
+
+	int in_bag[5];
+	int res[5];
+	memset(in_bag, 0, 20);
+	memset(res, 0, 20);
+	int maxV = 0;
+	for(int i=0;i<5;i++){
+		bag01(arr,5,10,i,0,0,maxV,in_bag,res);
+	}
+
+	cout<<maxV<<endl;
+    system("pause");
+    return 0;
+}
+```
