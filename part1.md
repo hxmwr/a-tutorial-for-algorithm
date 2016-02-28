@@ -337,3 +337,161 @@ int lis(int A[], int n){
 ```
 >***NOTE***<br>
 To solve this problem you must know what is the `Longest Increasing Subsequence`, The `Subsequence` is a increasing sequence and it may not be a continuous sequence, so there maybe a lot of possible subsequences, which make the problem a little more complexity. 
+### 8.Shortest Path In Undirected Graph
+![](http://my.csdn.net/uploads/201205/09/1336492910_7645.jpg)
+```C++
+#include "stdafx.h"
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define MAX_NODES 100
+#define PATH_LEN 100
+
+typedef struct ANode
+{
+	int adjvex;
+	ANode * next_arc;
+	int weight;
+} ArcNode;
+
+typedef struct VNode
+{
+	ArcNode * first_arc;
+} VexNode;
+
+typedef struct G
+{
+	VexNode nodes[MAX_NODES];
+	int n;
+} Graph;
+
+void AddNode(Graph &g, int arcs[][2], int n)
+{
+	VexNode v;
+	v.first_arc = NULL;
+	g.nodes[n] = v;
+	
+	if(g.n = 0) return;
+
+	for(int i=0;i<n;i++){
+		ArcNode &anode = *(new ArcNode);
+		anode.adjvex = n;
+		anode.weight = arcs[i][1];
+		anode.next_arc = g.nodes[arcs[i][0]].first_arc;
+		g.nodes[arcs[i][0]].first_arc = &anode;
+
+		ArcNode &anode2 = *(new ArcNode);
+		anode2.adjvex = arcs[i][0];
+		anode2.weight = arcs[i][1];
+		anode2.next_arc = g.nodes[n].first_arc;
+		g.nodes[n].first_arc = &anode2;
+	}
+	g.n += 1;
+}
+
+void MinPath(Graph &g, int start, int end, int path[], int n, int path_weight, int &min_weight, int min_path[])
+{
+	if(start == end){
+		if(path_weight < min_weight){
+			min_weight = path_weight;
+			memset(min_path, 0, PATH_LEN*4);
+			memcpy(min_path, path, n*4);
+		}
+
+		return;
+	}
+	ArcNode *p = g.nodes[start].first_arc;
+
+	while(p != NULL){
+		int flag = 0;
+		for(int i=0;i<n;i++){
+			if(path[i] == p->adjvex) {
+				flag = 1;
+				break;
+			}
+		}
+
+		if(flag){
+			p = p->next_arc;
+			continue;
+		}else{
+			path[n] = p->adjvex;
+			MinPath(g, p->adjvex, end, path, n+1, path_weight+p->weight, min_weight, min_path);
+			p = p->next_arc;
+		}
+	}
+}
+
+void AddArcs(Graph &g, int arcs[][3], int n)
+{
+	for(int i=0;i<n;i++){
+		ArcNode &anode = *(new ArcNode);
+		anode.adjvex = arcs[i][1];
+		anode.weight = arcs[i][2];
+		anode.next_arc = g.nodes[arcs[i][0]].first_arc;
+		g.nodes[arcs[i][0]].first_arc = &anode;
+
+		ArcNode &anode2 = *(new ArcNode);
+		anode2.adjvex = arcs[i][0];
+		anode2.weight = arcs[i][2];
+		anode2.next_arc = g.nodes[arcs[i][1]].first_arc;
+		g.nodes[arcs[i][1]].first_arc = &anode2;
+	}
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Graph g;
+	g.n = 12;
+
+	for(int i=0;i<g.n;i++){
+		g.nodes[i].first_arc = NULL;
+	}
+
+	int arr[][3] = {
+		{0,3,2},
+		{0,2,5},
+		{0,1,3},
+		{1,2,4},
+		{3,7,3},
+		{3,2,2},
+		{2,6,6},
+		{7,6,8},
+		{1,4,10},
+		{2,5,1},
+		{4,5,4},
+		{5,11,2},
+		{6,11,2},
+		{4,8,2},
+		{5,10,8},
+		{11,10,5},
+		{8,10,6},
+		{8,9,1},
+		{9,10,9}
+	};
+
+	AddArcs(g, arr, sizeof(arr)/sizeof(arr[0]));
+   
+	int path[PATH_LEN];
+	int min_path[PATH_LEN];
+	int min_weight = INT_MAX;
+
+	path[0] = 0;
+	MinPath(g, 0, 4, path, 1, 0, min_weight, min_path);
+
+	//show adjlist
+	for(int j=0;j<g.n;j++){
+		ArcNode *p = g.nodes[j].first_arc;
+		cout<<j<<"|";
+		while (p!=NULL){
+			cout<<"->"<<p->adjvex<<"["<<p->weight<<"]";
+			p = p->next_arc;
+		}
+		cout<<endl;
+	}
+
+    system("pause");
+    return 0;
+}
+```
