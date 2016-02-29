@@ -500,6 +500,38 @@ int _tmain(int argc, _TCHAR* argv[])
     return 0;
 }
 ```
+```C++
+//Dijkstra Algorithm
+void ShortestPath_DIJ(Graph &g, int v)
+{
+	int S[MAX_NODES][2];
+	S[0][0] = v;
+	S[0][1] = 0;
+	g.nodes[v].in_S = 1;
+	int n = 1;
+	while(n <= g.n)
+	{
+		int u;
+		int min = INT_MAX;
+		for(int i=0;i<n;i++){
+			ArcNode *p = g.nodes[S[i][0]].first_arc;
+			while(p != NULL){
+				if(g.nodes[p->adjvex].in_S == 0){
+					if((p->weight + S[i][1]) < min){
+						min = p->weight + S[i][1];
+						u = p->adjvex;
+					}			
+				}
+				p = p->next_arc;
+			}
+		}
+		S[n][0] = u;
+		S[n][1] = min;
+		g.nodes[u].in_S = 1;
+		n++;
+	}
+}
+```
 ###9. Max Value In Bag
 ```C++
 #include "stdafx.h"
