@@ -593,3 +593,61 @@ int _tmain(int argc, _TCHAR* argv[])
     return 0;
 }
 ```
+###10.Find Maxium Sub-Array
+```C++
+struct SubArray
+{
+	int low;
+	int high;
+	int sum;
+	SubArray(int a, int b, int c):low(a),high(b),sum(c){}
+};
+
+SubArray FindMaxCrossingSubArray(int arr[], int low, int mid, int high)
+{
+	int left_sum = INT_MIN;
+	int sum = 0;
+	int max_left;
+	for(int i=mid;i>=low;i--)
+	{
+		sum = sum + arr[i];
+		if(sum > left_sum){
+			left_sum = sum;
+			max_left = i;
+		}
+	}
+
+	int right_sum = INT_MIN;
+	sum = 0;
+	int max_right;
+	for(int j=mid+1;j<=high;j++)
+	{
+		sum = sum + arr[j];
+		if(sum > right_sum){
+			right_sum = sum;
+			max_right = j;
+		}
+	}
+
+	return SubArray(max_left, max_right, left_sum+right_sum);
+}
+
+SubArray FindMaxiumSubarray(int arr[], int low, int high)
+{
+	if(high == low) return SubArray(low,high, arr[low]);
+
+	int mid = (high+low)/2;
+
+	SubArray low_sub_arr = FindMaxiumSubarray(arr, low, mid);
+	SubArray high_sub_arr = FindMaxiumSubarray(arr, mid+1, high);
+	SubArray crossing_sub_arr = FindMaxCrossingSubArray(arr, low, mid, high);
+
+	if(low_sub_arr.sum >= high_sub_arr.sum && low_sub_arr.sum >= crossing_sub_arr.sum){
+		return low_sub_arr;
+	}else if(high_sub_arr.sum >= low_sub_arr.sum && high_sub_arr.sum >= crossing_sub_arr.sum){
+		return high_sub_arr;
+	}else{
+		return crossing_sub_arr;
+	}
+}
+```
