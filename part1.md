@@ -593,6 +593,24 @@ int _tmain(int argc, _TCHAR* argv[])
     return 0;
 }
 ```
+```C++
+//This algorithm works as the above one, but consume less time. And I conclude that if you want to build a recursive algorithm, you have to find a sub-problem which has the same structure as its parent problem, further more, if you want to make the algorithm more efficient, you must find a good sub-problem, just like these two algorithms, one of which has a good sub-problem, another of which has a bad sub-problem. 
+int package01(int M, int A[][3], int V, int n)
+{
+	int v1, v2;
+	for(int i=0;i<n;i++){
+		if(A[i][2] == 0 && A[i][0] <= M){
+			A[i][2] = 1;
+			v1 = package01(M-A[i][0], A, V + A[i][1], n);
+			v2 = package01(M, A, V, n);
+			return max(v1,v2);
+		}
+	}
+
+	return V;
+}
+
+```
 ###10.Find Maxium Sub-Array
 ```C++
 struct SubArray
