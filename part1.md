@@ -594,7 +594,11 @@ int _tmain(int argc, _TCHAR* argv[])
 }
 ```
 ```C++
-//This algorithm works as the above one, but consume less time. And I conclude that if you want to build a recursive algorithm, you have to find a sub-problem which has the same structure as its parent problem, further more, if you want to make the algorithm more efficient, you must find a good sub-problem, just like these two algorithms, one of which has a good sub-problem, another of which has a bad sub-problem. 
+//This algorithm works as the above one, but consume less time. 
+//And I conclude that if you want to build a recursive algorithm, 
+//you have to find a sub-problem which has the same structure as its parent problem, 
+//further more, if you want to make the algorithm more efficient, you must find a good sub-problem, 
+//just like these two algorithms, one of which has a good sub-problem, another of which has a bad sub-problem. 
 int package01(int M, int A[][3], int V, int n)
 {
 	int v1, v2;
