@@ -673,3 +673,55 @@ SubArray FindMaxiumSubarray(int arr[], int low, int high)
 	}
 }
 ```
+###11.Haffman Tree
+```C++
+typedef struct TNode
+{
+	TNode * lchild;
+	TNode * rchild;
+	int weight;
+
+	TNode(int w)
+	{
+		lchild = NULL;
+		rchild = NULL;
+		weight = w;
+	}
+
+	TNode(TNode *left, TNode *right)
+	{
+		lchild = left;
+		rchild = right;
+		weight = left->weight + right->weight;
+	}
+
+	static bool compare(TNode *a, TNode *b)
+	{
+		return a->weight < b->weight;
+	}
+} TreeNode;
+
+typedef struct Tree
+{
+	bool removed;
+	TNode *root;
+};
+
+TNode* haffman(list<TNode*> tlist)
+{
+	while(tlist.size() != 1){
+		tlist.sort(TNode::compare);
+
+		TNode *left = tlist.front();
+        tlist.pop_front();
+
+        TNode *right = tlist.front();
+        tlist.pop_front();
+
+        tlist.push_back(new TNode(left,right));
+	}
+
+	return tlist.front();
+}
+
+```
