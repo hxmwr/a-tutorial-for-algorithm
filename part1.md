@@ -540,7 +540,6 @@ void ShortestPath_FLOYD(int M[][4])
 		for(int i=0;i<4;i++){
 			for(int j=0;j<4;j++){
 				if(M[i][j]>(M[i][k]+M[k][j])){
-					__nop();
 					M[i][j] = M[i][k]+M[k][j];
 				}
 			}
