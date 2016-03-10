@@ -532,6 +532,22 @@ void ShortestPath_DIJ(Graph &g, int v)
 	}
 }
 ```
+```C++
+//The Floyd Algorithm is really clear, it gives the shortest path length of each pair of vertex, but it can not give the complete path info.
+void ShortestPath_FLOYD(int M[][4])
+{
+	for(int k=0;k<4;k++){
+		for(int i=0;i<4;i++){
+			for(int j=0;j<4;j++){
+				if(M[i][j]>(M[i][k]+M[k][j])){
+					__nop();
+					M[i][j] = M[i][k]+M[k][j];
+				}
+			}
+		}
+	}
+}
+```
 ###9. Max Value In Bag
 ```C++
 #include "stdafx.h"
