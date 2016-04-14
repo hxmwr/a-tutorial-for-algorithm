@@ -740,3 +740,188 @@ TNode* haffman(list<TNode*> tlist)
 }
 
 ```
+###12. Hash Table(PHP implementation with time33 hash func)
+```C++
+#define SUCCESS 1
+#define FAILURE 0
+#define HT_INVALID_IDX ((uint32_t) -1)
+#define HT_MIN_MASK ((uint32_t) -2)
+#define HASH_UPDATE 		(1<<0)
+#define HASH_ADD			(1<<1)
+#define HASH_NEXT_INSERT	(1<<2)
+#define HASH_DEL_KEY 0
+#define HASH_DEL_INDEX 1
+
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
+class HashTable
+{
+
+public :
+
+/*
+All actual data elements are putted into buckets and the buckets are listed when they contains elements which 
+have hash address collision, in addition, all buckets are listed as a global list which allows us append element
+to the tail of the list directly.
+*/
+typedef struct bucket {
+    ulong h;
+    uint nKeyLength;
+    void *pData;
+    void *pDataPtr;
+    struct bucket *pListNext;//next element in the global list
+    struct bucket *pListLast;//last element int the global list
+    struct bucket *pNext;
+    struct bucket *pLast;
+    const char *arKey;
+} Bucket;
+
+private:
+    uint nTableSize;
+    uint nTableMask;
+    uint nNumOfElements;
+    ulong nNextFreeElement;
+    Bucket *pInternalPointer;   /* Used for element traversal */
+    Bucket *pListHead;
+    Bucket *pListTail;
+    Bucket **arBuckets;
+
+private:
+	void check_init()
+	{
+		do {                                             
+			if ((this)->nTableMask == 0) {                                
+				(this)->arBuckets = (Bucket **) malloc((this)->nTableSize*sizeof(Bucket *));   
+				(this)->nTableMask = (this)->nTableSize - 1;                        
+			}                                                                   
+		} while (0);
+	}
+
+public:
+	HashTable (uint nSize)
+	{
+	    uint i = 3;
+ 
+		if (nSize >= 0x80000000) {
+			/* prevent overflow */
+			this->nTableSize = 0x80000000;
+		} else {
+			while ((1U << i) < nSize) {
+				i++;
+			}
+			this->nTableSize = 1 << i;
+		}
+ 
+		this->nTableMask = 0; /* 0 means that this->arBuckets is uninitialized */
+		this->arBuckets = NULL;
+		this->pListHead = NULL;
+		this->pListTail = NULL;
+		this->nNumOfElements = 0;
+		this->nNextFreeElement = 0;
+		this->pInternalPointer = NULL;
+	}
+
+	ulong hash_func(const char *arKey, uint nKeyLength)
+	{      
+		register ulong hash = 5381;
+ 
+		for (; nKeyLength >= 8; nKeyLength -= 8) {
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+			hash = ((hash << 5) + hash) + *arKey++;
+		}
+ 
+		switch (nKeyLength) {
+			case 7: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 6: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 5: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 4: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 3: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 2: hash = ((hash << 5) + hash) + *arKey++; /* fallthrough... */
+			case 1: hash = ((hash << 5) + hash) + *arKey++; break;
+			case 0: break;
+			default: break;
+		}
+
+		return hash;
+	}
+
+	
+
+	int hash_index_find(ulong h, void **pData)
+	{
+		uint nIndex;
+		Bucket *p;
+		
+		//calculate index
+		nIndex = h & this->nTableMask;
+		p = this->arBuckets[nIndex];
+		//find the target element from the bucket list
+		while (p != NULL) {
+			if ((p->h == h) && (p->nKeyLength == 0)) {
+				*pData = p->pData;
+				return SUCCESS;
+			}
+			p = p->pNext;
+		}
+ 
+		//element not found
+		return FAILURE;
+	}
+
+	int hash_find(const char *arKey, uint nKeyLength, void **pData)
+	{
+		ulong h;
+		uint nIndex;
+		Bucket *p;
+ 
+		h = this->hash_func(arKey, nKeyLength);
+		nIndex = h & this->nTableMask;
+		p = this->arBuckets[nIndex];
+		while (p != NULL) {
+			if (p->arKey == arKey ||
+				((p->h == h) && (p->nKeyLength == nKeyLength) && !memcmp(p->arKey, arKey, nKeyLength))) {
+					*pData = p->pData;
+					return SUCCESS;
+			}
+			p = p->pNext;
+		}
+		
+		//element not found
+		return FAILURE;
+	}
+
+	void connect_to_bucket_dllist(Bucket *element, Bucket *list_head)
+	{
+		(element)->pNext = (list_head);                         
+		(element)->pLast = NULL;                                
+		if ((element)->pNext) {                                 
+			(element)->pNext->pLast = (element);                
+		}
+	}
+
+	void connect_to_global_dllist(Bucket *element)
+	{
+		(element)->pListLast = (this)->pListTail;                 
+		(this)->pListTail = (element);                            
+		(element)->pListNext = NULL;                          
+		if ((element)->pListLast != NULL) {                     
+			(element)->pListLast->pListNext = (element);        
+		}                                                                           
+ 
+		if (!(this)->pListHead) {                                             
+			(this)->pListHead = (element);                               
+		}                                                                            
+ 
+		if ((this)->pInternalPointer == NULL) {                          
+			(this)->pInternalPointer = (element);                      
+		}
+	}
+}
+```
