@@ -822,6 +822,8 @@ public:
 		this->pInternalPointer = NULL;
 	}
 
+	//this function do not generate a list index, but a hash value which is used to do 'MOD' operation with the hash table size, 
+	//but in PHP a '&' operation used instead which could get a more effient execution.
 	ulong hash_func(const char *arKey, uint nKeyLength)
 	{      
 		register ulong hash = 5381;
