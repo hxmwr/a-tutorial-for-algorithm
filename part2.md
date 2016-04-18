@@ -107,6 +107,7 @@ static void *extend_heap(size_t words)
 	return coalesce(bp);
 }
 
+//allocator initialization
 int mm_init(void)
 {
 	if((heap_listp = (char *)mem_sbrk(4*WSIZE)) == NULL)
@@ -122,7 +123,7 @@ int mm_init(void)
 	return 0;
 }
 
-
+//Find a free block and return the block pointer
 void *find_fit_and_place(size_t size, char *start = heap_listp)
 {
 	char *blkp;
