@@ -193,3 +193,87 @@ void *mm_alloc(size_t size)
 	return bp;
 }
 ```
+###14. bufbomb
+```C++
+#include "stdafx.h"
+#include "stdlib.h"
+#include "ctype.h"
+#include "malloc.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+/* Like gets, except that characters are typed as pairs of hex digits. 
+Nondigit characters are ignored. Stops when encounters newline */ 
+char*getxs(char*dest) 
+{ 
+	int c; 
+	int even =1; /* Have read even number of digits */ 
+	int otherd =0; /* Other hex digit of pair */ 
+	char*sp = dest; 
+
+	std::fstream fs("C:\\Users\\mdx\\Documents\\Visual Studio 2012\\Projects\\assemble\\Debug\\test.txt",std::fstream::in);
+	cout<<fs.fail()<<endl;
+	char str[100];
+	char buf[2048];
+	int i = 0;
+	int j = 0;
+	memset(str,0,100);
+	memset(buf,0,2048);
+	while(!fs.eof()){
+		fs.getline(str,100);
+		memcpy(buf+i,str+12,11);
+		buf[i+11] = 0x20;
+		i += 12;
+	}
+
+
+	while ((c = buf[j++]) != EOF && c !='\n' && c != 0) { 
+		if (isxdigit(c)) { 
+			int val; 
+			if ('0'<= c && c <='9') 
+				val = c -'0'; 
+			else if ('A'<= c && c <='F') 
+				val = c -'A'+10; 
+			else 
+				val = c -'a'+10; 
+			if (even) { 
+				otherd = val; 
+				even =0; 
+			}
+			else { 
+				*sp++= otherd *16+ val; 
+				even =1; 
+			} 
+		} 
+	} 
+	*sp++='\0'; 
+	return dest; 
+} 
+
+/* $begin getbuf-c */ 
+int getbuf() 
+{
+	char *buf = (char*) alloca(16); 
+	getxs(buf); 
+	return 1; 
+} 
+
+void test() 
+{ 
+	int val;
+	printf("Please enter hex string:\n");
+	val = getbuf();
+	printf("Result is %d", val);
+} 
+/* $end getbuf-c */ 
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	test();
+	system("pause");
+	return 0;
+}
+
+
+```
