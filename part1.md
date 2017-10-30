@@ -24,63 +24,27 @@ These stuffs are not organized purpersely, nor it's a note of the book ***Introd
 ### 2. Quick Sort ###
 ``` c
 	//single loop
-	void quick_sort(int *arr, int start, int end)
-	{
-		if(start == end){
-			return;
-		}
-	
-		int i = start, j = end, key = arr[start], mid;
-	
-		while(i!=j){
-			if(arr[i] >= key){
-				if(arr[j] < key){
-					swap(arr[j], arr[i]);
-					if(( j-i) > 2){
-						if(arr[i+1] < key){
-							i++;
-						}
-						j--;
-					}else if((j-i) == 1){
-						j--;
-					}else{
-						if(arr[i+1] < key){
-							i++;
-							j--;
-						}else{
-							j -= 2;
-						}
-					}
-				}else{
-					j--;
-				}				
-			}else{
-				if(arr[j] < key){
-					i++;
-				}else{
-					if((j - i) > 2){
-						if(arr[i+1] < key){
-							i++;
-						}
-						j--;
-					}else if((j-i) == 2){
-						if(arr[i+1] < key){
-							i++;
-							j--;
-						}else{
-							j -= 2;
-						}
-					}else{
-						j--;
-					}
-				}
-			}
-		}
-	
-		mid = i;
-		quick_sort(arr, start, mid);
-		quick_sort(arr, mid + 1, end);
+	void swap_int(int *a, int *b) {
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void quick_sort(int a[], int len) {
+	int i=0, pvot=0;
+
+	if (len <= 1)
+		return;
+
+	for (;i<len;i++) {
+		if (a[i] < a[len-1])
+			swap_int(a+i, a+pvot++);
 	}
+
+	swap_int(a+pvot, a+len-1);
+	quick_sort(a, pvot++);
+	quick_sort(a+pvot, len - pvot);
+}
 ```
 ######
 ``` c
