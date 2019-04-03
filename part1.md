@@ -532,7 +532,7 @@ void ShortestPath_FLOYD(int M[][4])
 	}
 }
 ```
-###9. Max Value In Bag
+### 9. Max Value In Bag
 ```C++
 #include "stdafx.h"
 #include <iostream>
@@ -615,7 +615,7 @@ int package01(int M, int A[][3], int V, int n)
 }
 
 ```
-###10.Find Maxium Sub-Array
+### 10.Find Maxium Sub-Array
 ```C++
 struct SubArray
 {
@@ -673,7 +673,7 @@ SubArray FindMaxiumSubarray(int arr[], int low, int high)
 	}
 }
 ```
-###11.Haffman Tree
+### 11.Haffman Tree
 ```C++
 typedef struct TNode
 {
@@ -725,7 +725,7 @@ TNode* haffman(list<TNode*> tlist)
 }
 
 ```
-###12. Hash Table(PHP implementation with time33 hash func)
+### 12. Hash Table(PHP implementation with time33 hash func)
 ```C++
 #define SUCCESS 1
 #define FAILURE 0
