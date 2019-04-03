@@ -912,3 +912,151 @@ public:
 	}
 }
 ```
+
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ORDER 3
+
+struct node_t {
+    int num_keys;
+    int is_leaf;
+    int keys[ORDER];
+    struct node_t *parent;
+    struct node_t *child_node[ORDER];
+};
+
+struct leaf_node_t {
+    int num_keys;
+    int is_leaf;
+    int keys[ORDER];
+    struct node_t *parent;
+    int record[ORDER];
+};
+
+
+struct bp_tree_t {
+    int order;
+    struct node_t *root;
+};
+
+struct node_t *find_leaf_node(struct node_t *node, int k) {
+    if (node->is_leaf)
+        return node;
+
+    int i;
+    for (i = 0; i < node->num_keys; i++) {
+        if (k < node->keys[i])
+            break;
+    }
+    return find_leaf_node(node->child_node[i], k);
+}
+
+struct node_t *create_node() {
+    return malloc(sizeof(struct node_t));
+}
+
+
+void insert_into_internal_node(struct bp_tree_t *t, struct node_t *node, struct node_t *new_child_node, int k) {
+    node->keys[node->num_keys] = k;
+    node->child_node[node->num_keys + 1] = new_child_node;
+    node->num_keys += 1;
+    // split
+    if (node->num_keys == ORDER) {
+        struct node_t *new_node = create_node();
+        new_child_node->parent = new_node;
+        new_node->is_leaf = 0;
+        new_node->num_keys = (ORDER%2 == 0)?(ORDER/2):(ORDER/2 + 1) - 1;
+        new_node->child_node[new_node->num_keys] = node->child_node[node->num_keys];
+        node->num_keys = ORDER/2;
+        new_node->parent = node->parent;
+        for (int ii = ORDER/2 + 1, jj = 0; ii < ORDER; ii++, jj++) {
+            new_node->keys[jj] = node->keys[ii];
+            new_node->child_node[jj] = node->child_node[ii];
+        }
+        if (node->parent) {
+            insert_into_internal_node(t, node->parent, new_node, node->keys[ORDER/2]);
+        } else {
+            struct node_t *new_root = create_node();
+            new_root->is_leaf = 0;
+            new_root->parent = 0;
+            new_root->num_keys = 1;
+            new_root->keys[0] = node->keys[ORDER/2];
+            new_root->child_node[0] = node;
+            new_root->child_node[1] = new_node;
+            node->parent = new_root;
+            new_node->parent = new_root;
+            t->root = new_root;
+        }
+    }
+}
+
+void insert(struct bp_tree_t *t, int k, int v) {
+    struct leaf_node_t *leaf_node = (struct leaf_node_t *) find_leaf_node(t->root, k);
+    int i;
+    for (i = 0; i < leaf_node->num_keys; i++) {
+        if (leaf_node->keys[i] == k) {
+            leaf_node->record[i] = v;
+            return;
+        } else if (k < leaf_node->keys[i]) {
+            break;
+        }
+    }
+    leaf_node->num_keys += 1;
+    for (int j = i + 1; j < leaf_node->num_keys; j++) {
+        leaf_node->keys[j] = leaf_node->keys[j - 1];
+        leaf_node->record[j] = leaf_node->record[j - 1];
+    }
+    leaf_node->keys[i] = k;
+    leaf_node->record[i] = v;
+    if (leaf_node->num_keys == ORDER) {
+        // leaf node is full, then split
+        struct leaf_node_t *new_leaf_node = (struct leaf_node_t *)create_node();
+        leaf_node->num_keys = ORDER/2;
+        new_leaf_node->num_keys = (ORDER%2 == 0)?(ORDER/2):(ORDER/2 + 1);
+        new_leaf_node->is_leaf = 1;
+        new_leaf_node->parent = leaf_node->parent;
+        for (int ii = ORDER/2, jj = 0; ii < ORDER; ii++, jj++) {
+            new_leaf_node->keys[jj] = leaf_node->keys[ii];
+            new_leaf_node->record[jj] = leaf_node->record[ii];
+        }
+
+        if (leaf_node->parent) {
+            insert_into_internal_node(t, leaf_node->parent, (struct node_t *)new_leaf_node, new_leaf_node->keys[0]);
+        } else {
+            struct node_t *root = create_node();
+            root->is_leaf = 0;
+            root->num_keys = 1;
+            root->parent = 0;
+            root->keys[0] = new_leaf_node->keys[0];
+            root->child_node[0] = (struct node_t *)leaf_node;
+            root->child_node[1] = (struct node_t *)new_leaf_node;
+            leaf_node->parent = root;
+            new_leaf_node->parent = root;
+            t->root = root;
+        }
+    }
+}
+
+
+int main() {
+    // initialization
+    struct node_t *root = create_node();
+    root->is_leaf = 1;
+    root->num_keys = 0;
+    root->parent = 0;
+    struct bp_tree_t bp_tree;
+    bp_tree.root = root;
+    bp_tree.order = ORDER;
+
+    // test insertions
+    insert(&bp_tree, 1, 1);
+    insert(&bp_tree, 2, 2);
+    insert(&bp_tree, 3, 3);
+    insert(&bp_tree, 4, 4);
+    insert(&bp_tree, 5, 5);
+    return 0;
+}
+```
