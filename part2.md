@@ -1,5 +1,5 @@
 # a-tutorial-for-algorithm(part2)
-###13.A simple allocator
+### 13.A simple allocator
 ```C++
 static char *heap_listp;
 static char *mem_start_brk;
@@ -193,7 +193,7 @@ void *mm_alloc(size_t size)
 	return bp;
 }
 ```
-###14. bufbomb
+### 14. bufbomb
 ```C++
 #include "stdafx.h"
 #include "stdlib.h"
@@ -276,4 +276,50 @@ int _tmain(int argc, _TCHAR* argv[])
 }
 
 
+```
+
+### epoll example
+```C/C++
+ EPOLLIN | EPOLLET;
+	event.data.fd = sock;
+	epoll_ctl(epd, EPOLL_CTL_ADD, sock, &event);
+
+	for (;;) {
+		int n = epoll_wait(epd, events, 1024, -1);
+		int i;
+		for (i=0; i< n;i++) {
+			printf("event fd %d\n", events[i].data.fd);
+			printf("event bit mask %x\n", events[i].events);
+			if (events[i].events & EPOLLERR || events[i].events & EPOLLHUP || !events[i].events & EPOLLIN) {
+				fprintf(stderr, "epoll error\n");
+				close(events[i].data.fd);
+				continue;
+			} else if (events[i].data.fd == sock) {
+				sock2 = accept(sock, (struct sockaddr *)&sa, &socklen);
+				if (sock2 == -1) {
+					continue;
+					}
+					int flags = fcntl(sock2, F_GETFL, 0);
+				flags |= O_NONBLOCK;
+				fcntl(sock2, F_SETFL, flags);
+				event.data.fd = sock2;
+				epoll_ctl(epd, EPOLL_CTL_ADD, sock2, &event);
+			} else if (events[i].events & EPOLLIN) {
+				int done;
+				char buff[512];
+				for (;;) {
+					int count = read(events[i].data.fd, buff, 512);
+					if (count == -1) {
+						break;
+					} else if (count == 0) {
+						break;
+					}
+					write(1, buff, count);
+				}
+			}
+		}
+
+	}
+	return 0;
+}
 ```
