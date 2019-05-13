@@ -279,8 +279,41 @@ int _tmain(int argc, _TCHAR* argv[])
 ```
 
 ### epoll example
-```C/C++
- EPOLLIN | EPOLLET;
+```C++
+#include <stdio.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/epoll.h>
+#include <fcntl.h>
+
+int main(int argc, char **argv)
+{
+	// initialization
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
+
+	// set sock option
+	int opt = 1;
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, (socklen_t)sizeof(opt));
+
+	// bind socket to sockaddr
+	struct sockaddr_in sa;
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(7080);
+	bind(sock, (struct sockaddr *)&sa, sizeof(sa));
+
+	// listen
+	listen(sock, 3);
+
+	// accept connection request
+	socklen_t socklen = sizeof(sa);
+	int epd = epoll_create1(0);
+	int sock2;
+	struct epoll_event events[10240];
+	struct epoll_event event;
+
+	fcntl(sock, F_SETFL, 1 | O_NONBLOCK);
+	event.events = EPOLLIN | EPOLLET;
 	event.data.fd = sock;
 	epoll_ctl(epd, EPOLL_CTL_ADD, sock, &event);
 
@@ -320,6 +353,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 
 	}
+
+	// read bytes from new established socket
+	// char buf[1024];
+	// read(new_sock, buf, 1024);
+
+	// // print request content
+	// printf("%s\n", buf);
+
 	return 0;
 }
 ```
